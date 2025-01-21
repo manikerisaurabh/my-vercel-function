@@ -305,7 +305,7 @@ async def main(submission_id, assignment_id, user_id):
     print(f"BUCKET_NAME: {BUCKET_NAME}")
 
     # Download images from S3 before starting analysis
-    download_images_from_s3(BUCKET_NAME, SCREENSHOTS_FOLDER, PREFIX, 1, 3)
+    download_images_from_s3(BUCKET_NAME, SCREENSHOTS_FOLDER, PREFIX, 3, 4)
 
 
     # Run analysis after downloading images
