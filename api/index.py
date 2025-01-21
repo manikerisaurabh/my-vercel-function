@@ -1,7 +1,8 @@
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
-from helper.entry import main  # Import the main function from temp.py
+from helper.entry import main  # Import the main function
 import asyncio
+import json
 
 
 class handler(BaseHTTPRequestHandler):
@@ -17,18 +18,21 @@ class handler(BaseHTTPRequestHandler):
         start_no = params.get('start_no', [None])[0]
         end_no = params.get('end_no', [None])[0]
 
-        # Run the Trio event loop
-        response_message = asyncio.run(
-            self.execute_main(submission_id, assignment_id, user_id, start_no, end_no)
-        )
-
+        # Execute the `main` function asynchronously
+        try:
+            response_message = asyncio.run(
+                self.execute_main(submission_id, assignment_id, user_id, start_no, end_no)
+            )
+            status_code = 200  # Success
+        except Exception as e:
+            response_message = {"status": "error", "message": f"Error occurred: {str(e)}"}
+            status_code = 500  # Internal Server Error
 
         # Send response
-        self.send_response(200)
-        self.send_header("Content-type", "text/plain")
+        self.send_response(status_code)
+        self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(response_message.encode("utf-8"))
-        return
+        self.wfile.write(json.dumps(response_message).encode("utf-8"))
 
     async def execute_main(self, submission_id, assignment_id, user_id, start_no, end_no):
         """
@@ -37,6 +41,6 @@ class handler(BaseHTTPRequestHandler):
         try:
             # Call the main function with the necessary parameters
             await main(submission_id, assignment_id, user_id, start_no, end_no)
-            return "Successfully executed the main function from temp.py"
+            return {"status": "success", "message": "Main function executed successfully."}
         except Exception as e:
-            return f"Error occurred while executing main: {str(e)}"
+            raise Exception(f"Main function execution failed: {str(e)}")
