@@ -326,6 +326,7 @@ async def main(submission_id, assignment_id, user_id):
     except Exception as e:
         print(f"Error during timeline analysis: {e}")
 
+
 # if __name__ == "__main__":
 #     # This ensures your `main()` function is run within an event loop
 #     asyncio.run(main(submission_id, assignment_id, user_id))
