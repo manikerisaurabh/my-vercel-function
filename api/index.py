@@ -14,10 +14,12 @@ class handler(BaseHTTPRequestHandler):
         submission_id = params.get('submission_id', [None])[0]
         assignment_id = params.get('assignment_id', [None])[0]
         user_id = params.get('user_id', [None])[0]
+        start_no = params.get('start_no', [None])[0]
+        end_no = params.get('end_no', [None])[0]
 
         # Run the Trio event loop
         response_message = asyncio.run(
-            self.execute_main(submission_id, assignment_id, user_id)
+            self.execute_main(submission_id, assignment_id, user_id, start_no, end_no)
         )
 
 
@@ -28,13 +30,13 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(response_message.encode("utf-8"))
         return
 
-    async def execute_main(self, submission_id, assignment_id, user_id):
+    async def execute_main(self, submission_id, assignment_id, user_id, start_no, end_no):
         """
         Executes the `main` function from temp.py and returns a response message.
         """
         try:
             # Call the main function with the necessary parameters
-            await main(submission_id, assignment_id, user_id)
+            await main(submission_id, assignment_id, user_id, start_no, end_no)
             return "Successfully executed the main function from temp.py"
         except Exception as e:
             return f"Error occurred while executing main: {str(e)}"

@@ -284,10 +284,12 @@ async def analyze_screenshots(
     return timeline
 
 
-async def main(submission_id, assignment_id, user_id):
+async def main(submission_id, assignment_id, user_id, start_no, end_no):
     if not submission_id:
         raise ValueError("submission_id is required but not provided.")
 
+    print(f"this is start : {start_no}")
+    print(f"this is end : {end_no}")
     # Configuration
     ASSIGNMENT_ID=submission_id
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Replace with your actual API key
@@ -305,7 +307,7 @@ async def main(submission_id, assignment_id, user_id):
     print(f"BUCKET_NAME: {BUCKET_NAME}")
 
     # Download images from S3 before starting analysis
-    download_images_from_s3(BUCKET_NAME, SCREENSHOTS_FOLDER, PREFIX, 3, 4)
+    download_images_from_s3(BUCKET_NAME, SCREENSHOTS_FOLDER, PREFIX, start_no, end_no)
 
 
     # Run analysis after downloading images
