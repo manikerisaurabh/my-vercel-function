@@ -288,8 +288,14 @@ async def main(submission_id, assignment_id, user_id, start_no, end_no):
     if not submission_id:
         raise ValueError("submission_id is required but not provided.")
 
-    print(f"this is start : {start_no}")
-    print(f"this is end : {end_no}")
+    try:
+        start_no = int(start_no)
+        end_no = int(end_no)
+    except ValueError:
+        raise ValueError("start_no and end_no must be valid integers.")
+
+    print(f"This is start: {start_no}")
+    print(f"This is end: {end_no}")
     # Configuration
     ASSIGNMENT_ID=submission_id
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Replace with your actual API key
